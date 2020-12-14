@@ -17,3 +17,8 @@ dockerrunbash()
 {
   docker run -it $@ /bin/bash
 }
+
+dockerexecbash()
+{
+  docker exec -it $@ /bin/bash
+}
