@@ -8,11 +8,6 @@ truedel()
   /bin/rm -i $@
 }
 
-k8sexecbashforpod()
-{
-  kubectl exec -it $@ -- /bin/bash
-}
-
 dockerrunbash()
 {
   docker run -it $@ /bin/bash
@@ -21,4 +16,14 @@ dockerrunbash()
 dockerexecbash()
 {
   docker exec -it $@ /bin/bash
+}
+
+k8sexecbashforpod()
+{
+  kubectl exec -it $@ -- /bin/bash
+}
+
+applyffork8s()
+{
+  kubectl apply -f $@
 }
