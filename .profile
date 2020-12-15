@@ -23,7 +23,7 @@ alias vscode='open -a /Applications/Visual\ Studio\ Code.app/'
 alias ssh-83='ssh -i ~/.ssh/id_rsa_new ubuntu@106.54.255.83'
 
 alias chk8sclusterpre='ln -snf ~/.kube/pre.config ~/.kube/config'
-alias chk8sclusterprod-fin='ln -snf ~/.kube/prod.config ~/.kube/config'
+alias chk8sclusterprod='ln -snf ~/.kube/prod.config ~/.kube/config'
 alias prek8spods='ln -snf ~/.kube/pre.config ~/.kube/config && kubectl get pods'
 alias prodk8spods='ln -snf ~/.kube/prod.config ~/.kube/config && kubectl get pods'
 alias k8applyfforpre='ln -snf ~/.kube/pre.config ~/.kube/config && applyffork8s'
