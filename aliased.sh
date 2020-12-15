@@ -18,7 +18,7 @@ dockerexecbash()
   docker exec -it $@ /bin/bash
 }
 
-k8sexecbashforpod()
+k8execbashforpod()
 {
   kubectl exec -it $@ -- /bin/bash
 }
