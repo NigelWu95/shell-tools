@@ -1,4 +1,4 @@
-source aliased.sh
+source simplified.sh
 alias rm=softdel
 alias trm=truedel
 
@@ -11,8 +11,6 @@ alias k8applyfforprod='ln -snf ~/.kube/prod.config ~/.kube/config && applyffork8
 
 alias sublime='open -a /Applications/Sublime\ Text.app/'
 alias vscode='open -a /Applications/Visual\ Studio\ Code.app/'
-
-alias ssh-83='ssh -i ~/.ssh/id_rsa_new ubuntu@106.54.255.83'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/wubingheng/.sdkman"
