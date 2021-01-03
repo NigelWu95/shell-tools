@@ -58,11 +58,51 @@ dkerirm()
   docker image rm $@
 }
 
-gcheckout(){
+gicheckout(){
   git checkout $@
 }
 
-gclone()
+giclone()
 {
   git clone $@
+}
+
+gicommit()
+{
+  git commit -m $@
+}
+
+gimerge()
+{
+  git merge $@
+}
+
+gipsh()
+{
+  git push $@
+}
+
+gipshoset()
+{
+  git push origin $@ --set-upstream
+}
+
+gipll()
+{
+  git pull $@
+}
+
+gibcrt()
+{
+  git checkout -b $@
+}
+
+gibdel()
+{
+  git checkout -b $@
+}
+
+gibrdel()
+{
+  git push origin $@ --delete
 }
