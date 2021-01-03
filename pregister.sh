@@ -50,3 +50,10 @@ regis_locale_utf8()
   echo "export LC_ALL=en_US.UTF-8" >> ~/.profile
   source ~/.profile
 }
+
+regis_project()
+{
+  add_project="alias $1='idea ${2/ /\\ /}'"
+  echo $add_project >> ~/.profile
+  source ~/.profile
+}
