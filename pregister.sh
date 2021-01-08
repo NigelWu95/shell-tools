@@ -24,6 +24,15 @@ regis_path()
   source ~/.profile
 }
 
+regis_command()
+{
+  app_path=${2/ /\\ /}
+  chmod +x $app_path
+  add_app="alias $1='sh $app_path'"
+  echo $add_app >> ~/.profile
+  source ~/.profile
+}
+
 regis_ssh()
 {
   if [[ $# == 2 ]]; then

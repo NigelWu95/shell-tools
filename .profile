@@ -1,4 +1,5 @@
 source pregister.sh
+source shvared.sh
 source simplified.sh
 alias rm=softdel
 alias trm=truedel
