@@ -9,6 +9,10 @@ truedel()
 {
   /bin/rm -i $@
 }
+crontablist()
+{
+  cat /etc/passwd | cut -f 1 -d : | xargs -I {} crontab -l -u {}
+}
 
 #网络
 #查看网络连接数
