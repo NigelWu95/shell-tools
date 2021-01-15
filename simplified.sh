@@ -1,107 +1,174 @@
+#系统
+#查看系统用户所有限制值
+#ulimit -a
 softdel()
 {
   mv $@ ~/.trash/
 }
-
 truedel()
 {
   /bin/rm -i $@
 }
 
-dkerpull()
+#网络
+#查看网络连接数
+netconns()
 {
-  docker pull $@
+  netstat -an | grep $@ | wc -l
+}
+#查看 TCP 的并发请求数
+tcpconns()
+{
+  netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+#  netstat -n | grep  ^tcp|awk '{print $NF}' | sort -nr | uniq -c
+#  netstat -n | awk '/^tcp/ {++state[$NF]} END {for(key in state) print key,"t",state[key]}'
 }
 
-dkerpush()
+#进程
+#查看进程打开文件数
+pidfiles()
 {
-  docker push $@
+  lsof -p $@ | wc -l
+}
+#查看进程资源限制
+pidlimits()
+{
+  cat /proc/$@/limits
+}
+#查看程序的线程数
+procthreads()
+{
+  ps -efL | grep $@ | wc -l
+}
+#查看进程 CPU/MEM 占用率
+proccpu()
+{
+  ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu
+}
+procmem()
+{
+  ps H -eo user,pid,ppid,tid,time,%mem,cmd --sort=%mem
 }
 
-dkerrunbash()
+#磁盘
+#获取磁盘列表
+disks()
 {
-  docker run -it $@ /bin/bash
+  fdisk -l | grep 'Disk' | grep '/dev' | awk '{print $2}' | awk -F: '{print $1}'| egrep 'xvd|vd|sd'
 }
 
-dkerexecbash()
+#文本
+#匹配带日期的文件名
+datefiles()
 {
-  docker exec -it $@ /bin/bash
+  ls $@ | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])"
+}
+#找出带日期的 .log 日志文件
+findlogs()
+{
+  find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])"
+}
+#过滤非本月的日志（即本月以前的日志）
+findpremlogs()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2
+}
+#过滤非本月的日志并查看文件大小
+lhpremlogs()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2 | xargs -r ls -lh -v
+}
+#清理（永久删除）上个月及以前的日志（不需要 awk 判断日期大小）
+rmpremlogs()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2 | xargs -r rm -v
+}
+#清理（永久删除）上个月及以前的日志目录
+rmpremlogds()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])" | grep -v -e $ldate1 -e $ldate2 | xargs -r rm -r -v
 }
 
+#kubectl
 k8execbashforpod()
 {
   kubectl exec -it $@ -- /bin/bash
 }
-
 applyffork8s()
 {
   kubectl apply -f $@
 }
 
+#docker
+dkerpull()
+{
+  docker pull $@
+}
+dkerpush()
+{
+  docker push $@
+}
+dkerrunbash()
+{
+  docker run -it $@ /bin/bash
+}
+dkerexecbash()
+{
+  docker exec -it $@ /bin/bash
+}
 dockerrms()
 {
   docker ps --filter status=dead --filter status=exited -aq | xargs -r docker rm -v
 }
-
 dkerirms()
 {
   docker images | grep '^<none>' | awk '{print $3}' | xargs -r docker image rm -v
 }
-
 dkerrm()
 {
   docker rm $@
 }
-
 dkerirm()
 {
   docker image rm $@
 }
 
+#git
 gicheckout(){
   git checkout $@
 }
-
 giclone()
 {
   git clone $@
 }
-
 gicommit()
 {
   git commit -m $@
 }
-
 gimerge()
 {
   git merge $@
 }
-
 gipsh()
 {
   git push $@
 }
-
 gipshoset()
 {
   git push origin $@ --set-upstream
 }
-
 gipll()
 {
   git pull $@
 }
-
 gibcrt()
 {
   git checkout -b $@
 }
-
 gibdel()
 {
   git checkout -b $@
 }
-
 gibrdel()
 {
   git push origin $@ --delete
