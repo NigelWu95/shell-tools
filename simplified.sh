@@ -98,7 +98,8 @@ rmpremlogds()
   findpremlogds | xargs -r rm -r -v
 }
 #文件修改日期一天以前的文件目录执行删除（纯 find 命令）
-rmoutdaymfiles{
+rmoutdaymfiles()
+{
   find $@ -maxdepth 1 -mtime +1 -type d -exec rm -rf {} \;
 }
 
