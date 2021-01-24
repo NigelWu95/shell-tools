@@ -61,7 +61,7 @@ disks()
   fdisk -l | grep 'Disk' | grep '/dev' | awk '{print $2}' | awk -F: '{print $1}'| egrep 'xvd|vd|sd'
 }
 
-#文本
+#文件
 #匹配带日期的文件名
 datefiles()
 {
@@ -70,27 +70,36 @@ datefiles()
 #找出带日期的 .log 日志文件
 findlogs()
 {
-  find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])"
+  find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.log)?"
 }
-#过滤非本月的日志（即本月以前的日志）
+#根据文件名过滤非本月的日志（即本月以前的日志）
 findpremlogs()
 {
-  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.log)?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3
 }
-#过滤非本月的日志并查看文件大小
+#根据文件名过滤非本月的日志并查看文件大小
 lhpremlogs()
 {
-  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2 | xargs -r ls -lh -v
+   findpremlogs | xargs -r ls -lh -v
 }
-#清理（永久删除）上个月及以前的日志（不需要 awk 判断日期大小）
+#根据文件名清理（永久删除）上个月及以前的日志（不需要 awk 判断日期大小）
 rmpremlogs()
 {
-  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ -name *.log | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])" | grep -v -e $ldate1 -e $ldate2 | xargs -r rm -v
+   findpremlogs | xargs -r rm -v
 }
-#清理（永久删除）上个月及以前的日志目录
+#根据目录名查找上个月及以前的日志目录
+findpremlogds()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && export lyear=`date "+%Y$"` && find $@ -type d -regextype posix-egrep -regex ".*[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3 -e $lyear | xargs -r rm -r -v
+}
+#根据目录名清理（永久删除）上个月及以前的日志目录
 rmpremlogds()
 {
-  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && find $@ | grep -E "[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])" | grep -v -e $ldate1 -e $ldate2 | xargs -r rm -r -v
+  findpremlogds | xargs -r rm -r -v
+}
+#文件修改日期一天以前的文件目录执行删除（纯 find 命令）
+rmoutdaymfiles{
+  find $@ -maxdepth 1 -mtime +1 -type d -exec rm -rf {} \;
 }
 
 #kubectl
