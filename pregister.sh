@@ -68,3 +68,9 @@ regis_project()
   echo $add_project >> ~/.profile
   source ~/.profile
 }
+
+regis_crontab()
+{
+   echo -e "$@" >> ~/.shell-tools/crontab.conf
+   crontab ~/.shell-tools/crontab.conf
+}
