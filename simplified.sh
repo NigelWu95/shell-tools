@@ -70,12 +70,12 @@ datefiles()
 #找出带日期的 .log 日志文件
 findlogs()
 {
-  find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.log)?"
+  find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.[[:digit:]]*)?(\.log)??"
 }
 #根据文件名过滤非本月的日志（即本月以前的日志）
 findpremlogs()
 {
-  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.log)?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])(-|/)?([0-2][0-9]|3[0-1])(\.[[:digit:]]*)?(\.log)?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3
 }
 #根据文件名过滤非本月的日志并查看文件大小
 lhpremlogs()
@@ -97,10 +97,20 @@ rmpremlogds()
 {
   findpremlogds | xargs -r rm -r -v
 }
-#文件修改日期一天以前的文件目录执行删除（纯 find 命令）
+#一步清除（rm）上个月及以前的的日志文件与目录（如 nginx 日志目录）
+rmpremlogsds()
+{
+  export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && export lyear=`date "+%Y$"` && find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])?(-|/)?([0-2][0-9]|3[0-1])?(\.[[:digit:]]*)?(\.log)?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3 -e $lyear | xargs -r rm -r -v
+}
+#查找修改日期x天以前的文件/目录（纯 find 命令）
 rmoutdaymfiles()
 {
-  find $@ -maxdepth 1 -mtime +1 -type d -exec rm -rf {} \;
+  find $1 -maxdepth $2 -mtime +$3 -type $4 -exec rm -rf {} \;
+}
+#修改日期x天以前的文件/目录执行删除（纯 find 命令）
+rmoutdaymfiles()
+{
+  find $1 -maxdepth $2 -mtime +$3 -type $4 -exec rm -rf {} \;
 }
 
 #kubectl
