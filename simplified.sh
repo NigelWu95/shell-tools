@@ -105,7 +105,7 @@ rmpremlogsds()
 #查找修改日期x天以前的文件/目录（纯 find 命令）
 findoutdaymfiles()
 {
-  find $1 -maxdepth $2 -mtime +$3 -type $4 -exec rm -rf {} \;
+  find $1 -maxdepth $2 -mtime +$3 -type $4 -exec ls -l {} \;
 }
 #修改日期x天以前的文件/目录执行删除（纯 find 命令）
 rmoutdaymfiles()
