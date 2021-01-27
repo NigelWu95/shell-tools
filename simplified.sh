@@ -98,12 +98,12 @@ rmpremlogds()
   findpremlogds | xargs -r rm -r -v
 }
 #一步清除（rm）上个月及以前的的日志文件与目录（如 nginx 日志目录）
-findpremlogsds()
+rmpremlogsds()
 {
   export ldate1=`date "+%Y-%m"` && export ldate2=`date "+%Y%m"` && export ldate3=`date "+%Y/%m"` && export lyear=`date "+%Y$"` && find $@ -regextype posix-egrep -regex ".*(\.log\.)?[1-9][[:digit:]]{3}(-|/)?(0[1-9]|1[0-2])?(-|/)?([0-2][0-9]|3[0-1])?(\.[[:digit:]]*)?(\.log)?" | grep -v -e $ldate1 -e $ldate2 -e $ldate3 -e $lyear | xargs -r rm -r -v
 }
 #查找修改日期x天以前的文件/目录（纯 find 命令）
-rmoutdaymfiles()
+findoutdaymfiles()
 {
   find $1 -maxdepth $2 -mtime +$3 -type $4 -exec rm -rf {} \;
 }
