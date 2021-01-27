@@ -20,7 +20,7 @@ crontablist()
 #查看网络连接数
 netconns()
 {
-  netstat -an | grep $@ | wc -l
+  netstat -an | grep $1 | wc -l
 }
 #查看 TCP 的并发请求数
 tcpconns()
@@ -34,17 +34,17 @@ tcpconns()
 #查看进程打开文件数
 pidfiles()
 {
-  lsof -p $@ | wc -l
+  lsof -p $1 | wc -l
 }
 #查看进程资源限制
 pidlimits()
 {
-  cat /proc/$@/limits
+  cat /proc/$1/limits
 }
 #查看程序的线程数
 procthreads()
 {
-  ps -efL | grep $@ | wc -l
+  ps -efL | grep $1 | wc -l
 }
 #查看进程 CPU/MEM 占用率
 proccpu()
@@ -118,7 +118,7 @@ rmoutdaymfiles()
 #kubectl
 k8execbashforpod()
 {
-  kubectl exec -it $@ -- /bin/bash
+  kubectl exec -it $1 -- /bin/bash
 }
 applyffork8s()
 {
@@ -128,19 +128,19 @@ applyffork8s()
 #docker
 dkerpull()
 {
-  docker pull $@
+  docker pull $1
 }
 dkerpush()
 {
-  docker push $@
+  docker push $1
 }
 dkerrunbash()
 {
-  docker run -it $@ /bin/bash
+  docker run -it $1 /bin/bash
 }
 dkerexecbash()
 {
-  docker exec -it $@ /bin/bash
+  docker exec -it $1 /bin/bash
 }
 dockerrms()
 {
@@ -161,41 +161,41 @@ dkerirm()
 
 #git
 gicheckout(){
-  git checkout $@
+  git checkout $1
 }
 giclone()
 {
-  git clone $@
+  git clone $1
 }
 gicommit()
 {
-  git commit -m $@
+  git commit -m $1
 }
 gimerge()
 {
-  git merge $@
+  git merge $1
 }
 gipsh()
 {
-  git push $@
+  git push $1
 }
 gipshoset()
 {
-  git push origin $@ --set-upstream
+  git push origin $1 --set-upstream
 }
 gipll()
 {
-  git pull $@
+  git pull $1
 }
 gibcrt()
 {
-  git checkout -b $@
+  git checkout -b $1
 }
 gibdel()
 {
-  git checkout -b $@
+  git checkout -b $1
 }
 gibrdel()
 {
-  git push origin $@ --delete
+  git push origin $1 --delete
 }
