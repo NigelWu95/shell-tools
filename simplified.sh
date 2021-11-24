@@ -3,11 +3,11 @@
 #系统
 #查看系统用户所有限制值
 #ulimit -a
-softdel()
+srm()
 {
   mv $@ ~/.trash/
 }
-truedel()
+trm()
 {
   /bin/rm -i $@
 }
@@ -193,7 +193,7 @@ gibcrt()
 }
 gibdel()
 {
-  git checkout -b $1
+  git branch -D $1
 }
 gibrdel()
 {
