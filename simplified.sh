@@ -3,11 +3,11 @@
 #系统
 #查看系统用户所有限制值
 #ulimit -a
-srm()
+softdel()
 {
   mv $@ ~/.trash/
 }
-trm()
+truedel()
 {
   /bin/rm -i $@
 }
