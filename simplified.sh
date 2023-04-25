@@ -5,7 +5,7 @@
 #ulimit -a
 softdel()
 {
-  mv $@ ~/.trash/
+  trash -F $@
 }
 truedel()
 {
