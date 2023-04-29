@@ -73,3 +73,31 @@ function set_proxy_by_ordered_ports() {
         fi
     done
 }
+
+# python 的设置
+function set_python() {
+    #检查是否存在 python2，如果没有则将 python 命令转到 python3
+    if ! command -v python &> /dev/null; then
+        if command -v python2 &> /dev/null; then
+            alias python=python2
+        else
+            alias python=python3
+        fi
+    fi
+    if ! command -v pip &> /dev/null; then
+        if command -v pip2 &> /dev/null; then
+            alias pip=pip2
+        else
+            alias pip=pip3
+        fi
+    fi
+#    if [[ -n $http_proxy ]]; then
+#        pip config set global.proxy $http_proxy
+#    fi
+#    if [[ -n $https_proxy ]]; then
+#        pip config set global.proxy $https_proxy
+#    fi
+#    if [[ -n $socks_proxy ]]; then
+#        pip config set global.proxy $socks_proxy
+#    fi
+}
